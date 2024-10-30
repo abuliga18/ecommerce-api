@@ -1,6 +1,6 @@
 const express = require('express');
 const pool = require('../db');
-const authorizeSeller = require('../authorizeSeller');
+const authorizeSeller = require('../authMiddlewares/authorizeSeller');
 
 const productsRouter = express.Router();
 
