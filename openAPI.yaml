@@ -1,0 +1,435 @@
+openapi: 3.0.1
+info:
+  title: Ecommerce API
+  version: 1.0.0
+  description: >-
+    A REST API that allows users to perform various CRUD operations such as registering an account, browsing products for sale managing a shopping cart and completing purchases.
+paths:
+  /products:
+    get:
+      summary: Get all products
+      description: This path retrieves all products available in the database
+      operationId: getAllProducts
+      responses:
+        "200":
+          description: List of products retrieved successfully
+          content:
+            application/json:
+              examples:
+                products:
+                  value: >-
+                    [{"id":11,"name":"Wireless
+                    Headphones","description":"High-quality wireless headphones
+                    with noise cancellation and long battery
+                    life.","price":"89.99","stock_qty":100,"on_sale":true},{"id":12,"name":"Smartphone
+                    XYZ","description":"Latest smartphone with a stunning
+                    display and advanced camera
+                    features.","price":"699.99","stock_qty":50,"on_sale":false}
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              examples:
+                ServerError:
+                  value: '{error: "Internal server error"}'
+        default:
+          description: Default error sample response
+    post:
+      summary: Add a new product
+      description: This path adds a new product to the database
+      operationId: addNewProduct
+      responses:
+        "201":
+          description: Product created successfully
+          content:
+            application/json:
+              examples:
+                newProduct:
+                  value: >-
+                    {"id":20,"name":"Bicycle","description":"Mountain bike with
+                    21-speed gears and durable
+                    frame.","price":"399.99","stock_qty":25,"on_sale":true}
+        default:
+          description: Default error sample response
+  /products/on-sale:
+    get:
+      summary: Get products on sale
+      description: This path retrieves all products that are on sale
+      operationId: getOnSaleProducts
+      responses:
+        "200":
+          description: List of on-sale products retrieved successfully
+          content:
+            application/json:
+              examples:
+                saleProducts:
+                  value: |-
+                    [{
+                        "id": 11,
+                        "name": "Wireless Headphones",
+                        "description": "High-quality wireless headphones with noise cancellation and long battery life.",
+                        "price": "89.99",
+                        "stock_qty": 100,
+                        "on_sale": true
+                      },
+                      {
+                        "id": 13,
+                        "name": "Electric Kettle",
+                        "description": "Fast boiling electric kettle with temperature control and auto shut-off.",
+                        "price": "39.99",
+                        "stock_qty": 80,
+                        "on_sale": true
+                      }]
+        default:
+          description: Default error sample response
+  /products/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          description: ID of the product
+    get:
+      summary: Get product by ID
+      description: This path retrieves the product with the specified ID from the database
+      operationId: getProductById
+      responses:
+        "200":
+          description: Product retrieved successfully
+          content:
+            application/json:
+              examples:
+                product:
+                  value: >-
+                    {"id":13,"name":"Electric Kettle","description":"Fast
+                    boiling electric kettle with temperature control and auto
+                    shut-off.","price":"39.99","stock_qty":80,"on_sale":false}
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              examples:
+                NotFound:
+                  value: '{message: "Product does not exist"}'
+        default:
+          description: Default error sample response
+    put:
+      summary: Updates product by ID
+      description: Updates product details based on the provided ID.
+      operationId: updateProductById
+      responses:
+        "200":
+          description: Product updated successfully
+          content:
+            application/json:
+              examples:
+                updatedProduct:
+                  value: >-
+                    { message: 'Product updated successfully', product:
+                    {"id":13,"name":"Electric Kettle","description":"Fast
+                    boiling electric kettle with temperature control and auto
+                    shut-off.","price":"39.99","stock_qty":67,"on_sale":true}}
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              examples:
+                NotFound:
+                  value: '{ error: "Product does not exist"}'
+        default:
+          description: Default error sample response
+    delete:
+      summary: Delete product by ID
+      description: This path deletes the product matching the ID from the database
+      operationId: deleteProductById
+      responses:
+        "204":
+          description: Product deleted successfully
+          content:
+            application/json:
+              examples:
+                Successful:
+                  value: null
+        default:
+          description: Default error sample response
+  /products/categories/{categoryId}:
+    parameters:
+      - name: categoryId
+        in: path
+        required: true
+        schema:
+          type: integer
+          description: ID of the category
+    get:
+      summary: Get all products for category
+      description: This path retrieves all products with a matching cateogory id
+      operationId: getProductByCategory
+      responses:
+        "200":
+          description: List of products in the specified category retrieved successfully.
+          content:
+            application/json:
+              examples:
+                products:
+                  value: >-
+                    [{"id":14,"name":"Gaming Mouse","description":"Ergonomic
+                    gaming mouse with customizable RGB lighting and programmable
+                    buttons.","price":"59.99","stock_qty":120,"on_sale":true},{"id":19,"name":"VR
+                    Headset","description":"Immersive virtual reality headset
+                    compatible with multiple gaming
+                    platforms.","price":"299.99","stock_qty":40,"on_sale":false}]
+        default:
+          description: Default error sample response
+  /users/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          description: ID of the user
+    get:
+      summary: Get user data
+      description: This path retrieves data for the user with the specified ID
+      operationId: getUserData
+      responses:
+        "200":
+          description: User data retrieved successfully.
+          content:
+            application/json:
+              examples:
+                userData:
+                  value: '{"id":2,"email":"asb@gmail.com"}'
+        "404":
+          description: User not found
+          content:
+            application/json:
+              examples:
+                NotFound:
+                  value: '{"error":"User not found"}'
+        default:
+          description: Default error sample response
+    put:
+      summary: Update user profile
+      description: This path updates user profile matching the id
+      operationId: updateUserProfile
+      responses:
+        "200":
+          description: User profile updated successfully
+          content:
+            application/json:
+              examples:
+                updatedUser:
+                  value: |-
+                    {
+                        "message": "User profile update",
+                        "user": {
+                            "id": 6,
+                            "email": "leona31@gmail.com"
+                        }
+                    }
+        "400":
+          description: Failed to update user profile
+          content:
+            application/json:
+              examples:
+                Error:
+                  value: '{"error": "You chose the same password"}'
+        default:
+          description: Default error sample response
+    delete:
+      summary: Delete user
+      description: This path deletes the user profile matching the id
+      operationId: deleteUser
+      responses:
+        "200":
+          description: User deleted
+          content:
+            application/json:
+              examples:
+                deletedUser:
+                  value: "{message: 'User profile deleted'}"
+        default:
+          description: Default error sample response
+  /cart:
+    get:
+      summary: Get cart products
+      description: This path retrieves the content of the user's cart
+      operationId: getCartContents
+      responses:
+        "200":
+          description: Cart contents retrieved successfully
+          content:
+            application/json:
+              examples:
+                cart:
+                  value: |-
+                    {
+                        "cart": [
+                            {
+                                "name": "VR Headset",
+                                "quantity": 2,
+                                "price": "299.99"
+                            }
+                        ]
+                    }
+        default:
+          description: Default error sample response
+    post:
+      summary: Add product to cart
+      description: This path adds new product to the cart or updates existing product's quantity
+      operationId: addProductToCart
+      responses:
+        "201":
+          description: Product added to cart successfully
+          content:
+            application/json:
+              examples:
+                newProduct:
+                  value: |-
+                    {
+                    "message": "Product added to the cart"
+                    }
+        default:
+          description: Default error sample response
+    delete:
+      summary: Delete cart content
+      description: This path deletes user's cart content
+      operationId: clearCartContents
+      responses:
+        "200":
+          description: Cart cleared successfully
+          content:
+            application/json:
+              examples:
+                cart empty:
+                  value: '{message: "The cart is clear"}'
+        default:
+          description: Default error sample response
+  /cart/productId:
+    put:
+      summary: Update product
+      description: This path updates product matching productId in the user's cart
+      operationId: updateCartProduct
+      responses:
+        "200":
+          description: Product quantity updated successfully
+          content:
+            application/xml:
+              examples:
+                updatedProduct:
+                  value:
+                    message: Product quantity updated
+        default:
+          description: Default error sample response
+    delete:
+      summary: Delete product from cart
+      description: This path deletes product matching productId from user's cart
+      operationId: removeProductFromCart
+      responses:
+        "204":
+          description: Product removed from cart successfully
+          content:
+            application/json:
+              examples:
+                deletedProduct:
+                  value: '{message: "Product removed successfully"}'
+        default:
+          description: Default error sample response
+  /checkout:
+    post:
+      summary: Completes checkout
+      description: This path process checkout and create a new order
+      operationId: checkout
+      responses:
+        "201":
+          description: Order created successfully
+          content:
+            application/json:
+              examples:
+                orderCreated:
+                  value: "{message: 'Order created successfully. Order number: 9'}"
+        "400":
+          description: Failed checkout due to empty cart
+          content:
+            application/json:
+              examples:
+                Error:
+                  value: '{message: "The cart is empty."}'
+        default:
+          description: Default error sample response
+  /orders:
+    get:
+      summary: Get all orders for the user
+      description: This path retrieves all orders for the logged in user
+      operationId: getUserOrders
+      responses:
+        "200":
+          description: Orders retrieved successfully.
+          content:
+            application/json:
+              examples:
+                orders:
+                  value: |-
+                    {"orders": [
+                    {"id": 14,
+                    "date": "2024-10-30T12:49:03.722Z",
+                    "amount": "329.95",
+                    "name": "Action Figure",
+                    "quantity": 4,
+                    "price": "19.99"
+                    },
+                    {
+                    "id": 14,
+                    "date": "2024-10-30T12:49:03.722Z",
+                    "amount": "329.95",
+                    "name": "Designer Handbag",
+                    "quantity": 1,
+                    "price": "249.99"
+                    }
+                    ]
+                    }
+        "404":
+          description: No orders found for the user
+          content:
+            application/json:
+              examples:
+                Error:
+                  value: '{error: "No existing orders for this user}'
+        default:
+          description: Default error sample response
+  /orders/{orderId}:
+    get:
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: ID of the order
+      summary: Get order
+      description: This path retrieves the order matching the id
+      operationId: getOrderById
+      responses:
+        "200":
+          description: Order retrieved successfully
+          content:
+            application/json:
+              examples:
+                order:
+                  value: |-
+                    {"order_date": "2024-10-30T12:49:03.722Z",
+                    "amount": "329.95",
+                    "product_name": "Action Figure",
+                     "quantity": 4
+                    }
+        "404":
+          description: Order not found
+          content:
+            application/json:
+              examples:
+                Error:
+                  value: "{error: 'An order with this id does not exist.'}"
+        default:
+          description: Default error sample response
